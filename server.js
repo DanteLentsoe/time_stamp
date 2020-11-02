@@ -19,11 +19,58 @@ app.get("/", function (req, res) {
 });
 
 
+//The API endpoint is GET [project_url]/api/timestamp/:date_string?
 // your first API endpoint... 
-app.get("/api/hello", function (req, res) {
-  res.json({greeting: 'hello API'});
+app.get("/api/timestamp", (request, response) => {
+  
+  const date = new Date();
+  response.json({
+     unix: date.getTime(),
+     utc: date.toUTCString()
+  });
+  
+});
+//Anew Date(date_string) (JS) . Note that the unix timestamp needs to be an integer (not a string) specifying millisecond
+app.get("/api/timestamp/:date_string", function (request, response) {
+  
+  const { date_string } = request.params;
+  
+ let date = new Date(date_string);
+  
+  
+  //string date check
+  if(date.toString() === 'Invalid Date'){
+    date = new Date(parseInt(date_string));
+    console.log(date, typeof date, parseInt(date_string));
+  }
+  
+  
+  if(date.toString() === 'Invalid Date'){
+  return response.json({
+    error: "Invalid Date"
+    
+  });
+  } else {
+    
+    return response.json({
+      unix: date.getTime(),
+     utc: date.toUTCString()
+    });
+    
+  }
+    
 });
 
+//string conversion to int
+const stringDate = '2010-02-02';
+
+console.log(parseInt(stringDate));
+  
+  //date = new Date(date_string);
+  //date conversion
+  
+  //response.json({greeting: 'hello API'});
+  
 
 
 // listen for requests :)
